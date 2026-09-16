@@ -1,6 +1,6 @@
 import pygame
 import math
-
+from muscle import Muscle
 
 class Jellyfish:
     def __init__(self, x, y):
@@ -15,6 +15,9 @@ class Jellyfish:
         self.contraction = 0
         self.contraction_speed = 3
 
+        # Muscle regions around the bell
+        self.muscles = [Muscle() for _ in range(8)] 
+
     def update(self, dt):
         self.time += dt
 
@@ -22,6 +25,9 @@ class Jellyfish:
             1 - math.cos(self.time * self.contraction_speed)
         ) / 2
 
+        for muscle in self.muscles:
+            muscle.update(dt)
+    
         self.velocity += self.acceleration * dt
         self.position += self.velocity * dt
 

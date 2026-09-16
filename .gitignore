@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+
+.env
+secrets.txt
+
+build/
+node_modules/
+.vscode/
