@@ -9,6 +9,7 @@ class Neuron:
         self.refractory_timer = 0.0
 
         self.fired = False
+        self.activity = 0.0
         self.connections = []
 
     def update(self, dt):
@@ -21,6 +22,8 @@ class Neuron:
                 0.0, self.refractory_timer - dt
             )
             self.input_current = 0.0
+            self.membrane_potential = 0.0
+            self.activity = max(0.0, self.activity - 4.0 * dt)
             return
 
         # Integrate incoming current
@@ -38,6 +41,9 @@ class Neuron:
 
             # Begin refractory period
             self.refractory_timer = self.refractory_period
+            self.activity = 1.0
+        else:
+            self.activity = max(0.0, self.activity - 4.0 * dt)
 
     def add_input(self, current):
         # Accumulate incoming current
@@ -52,4 +58,5 @@ class Neuron:
         # A firing neuron sends a signal to connected neurons
         if self.fired:
             for neuron in self.connections:
-                neuron.membrane_potential += signal
+                if neuron.refractory_timer <= 0:
+                    neuron.membrane_potential += signal
